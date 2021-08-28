@@ -1,0 +1,20 @@
+{
+  "name": "simple-ellipses-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sketch.js",
+  "scripts": {
+    "build": "canvas-sketch src/sketch.js --build --dir dist",
+    "dev": "canvas-sketch src/sketch.js --open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "canvas-sketch": "^0.7.4",
+    "canvas-sketch-util": "^1.10.0"
+  },
+  "devDependencies": {
+    "canvas-sketch-cli": "^1.11.14"
+  }
+}
