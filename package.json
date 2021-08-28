@@ -4,7 +4,7 @@
   "description": "",
   "main": "sketch.js",
   "scripts": {
-    "build": "canvas-sketch src/sketch.js --build --dir dist",
+    "build": "canvas-sketch src/sketch.js --build --dir public",
     "dev": "canvas-sketch src/sketch.js --open"
   },
   "keywords": [],
