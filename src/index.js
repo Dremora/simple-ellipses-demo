@@ -1,26 +1,28 @@
 const canvasSketch = require('canvas-sketch');
 const Color = require('canvas-sketch-util/color');
 
+const slow = (new URLSearchParams(document.location.search.substring(1))).get('dizzy') === 'false';
+
 const settings = {
   animate: true
 };
 
-const COLOR_CHANGE_SPEED = 4; // seconds
-const ELLIPSE_DURATION = 6; // seconds
+const COLOR_CHANGE_SPEED = slow ? 15 : 4; // seconds
+const ELLIPSE_DURATION = slow ? 40 : 6; // seconds
 const ELLIPSE_STROKE_WIDTH = 100;
 const ELLIPSE_COUNT = 40;
 const MIN_ELLIPSE_RATIO = 1.1;
-const MAX_ELLIPSE_RATIO = 2;
-const ROTATION_SPEED = 5;
-const ROTATION_STAGGERING = 2;
+const MAX_ELLIPSE_RATIO = slow ? 1.3 : 2;
+const ROTATION_SPEED = slow ? 15 : 5;
+const ROTATION_STAGGERING = slow ? 1.2 : 2;
 const GROWTH_BOOST_FACTOR = 0.2;
 const X_CENTER_MOVE_SPEED = 8; // seconds
-const Y_CENTER_MOVE_SPEED = 1.4; // seconds
+const Y_CENTER_MOVE_SPEED = slow ? 10 : 1.4; // seconds
 const X_CENTER_MOVE_RANGE = 0.4; // [0, 1]
 const Y_CENTER_MOVE_RANGE = 0.2; // [0, 1]
 const BOOST_DELAY = 3; // seconds
 const BOOST_TIME = 6; // seconds
-const RIPPLE_FACTOR = 1.2;
+const RIPPLE_FACTOR = slow ? 0.5 : 1.2;
 
 const drawCircle = (context, width, height, progress, radius, time) => {
   const radiusBoost = 1 + (GROWTH_BOOST_FACTOR * (1 - progress)) / (1 - progress);
@@ -28,7 +30,7 @@ const drawCircle = (context, width, height, progress, radius, time) => {
   const y = height / 2 * (1 + Y_CENTER_MOVE_RANGE * Math.sin(time / Y_CENTER_MOVE_SPEED * 2 * Math.PI));
   const ellipseRatio = (Math.sin(time) / 2 + 0.5) * MIN_ELLIPSE_RATIO + (0.5 - Math.sin(time) / 2) * MAX_ELLIPSE_RATIO; 
   
-  context.fillStyle = Color.style({ hsl: [ (100 + progress * 200 + time * 360 / COLOR_CHANGE_SPEED) % 360, 100, (Math.sin(time * 2) / 2 + 0.5) * 100 ] });
+  context.fillStyle = Color.style({ hsl: [ (100 + progress * 200 + time * 360 / COLOR_CHANGE_SPEED) % 360, 100, (Math.sin(time * 2 / COLOR_CHANGE_SPEED) / 2 + 0.5) * 100 ] });
   context.beginPath();
   context.ellipse(x, y, radius * radiusBoost, radius * radiusBoost * ellipseRatio, time / ROTATION_SPEED * 2 * Math.PI + progress * ROTATION_STAGGERING * 2 * Math.PI, 0, 2 * Math.PI);
   context.fill();
