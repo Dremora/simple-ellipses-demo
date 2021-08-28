@@ -2,10 +2,10 @@
   "name": "simple-ellipses-demo",
   "version": "1.0.0",
   "description": "",
-  "main": "sketch.js",
+  "main": "src/index.js",
   "scripts": {
-    "build": "canvas-sketch src/sketch.js --build --dir public",
-    "dev": "canvas-sketch src/sketch.js --open"
+    "build": "canvas-sketch src/index.js --build --dir public",
+    "dev": "canvas-sketch src/index.js --open"
   },
   "keywords": [],
   "author": "",
