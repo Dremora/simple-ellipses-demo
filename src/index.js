@@ -25,8 +25,9 @@ const BOOST_DELAY = 3; // seconds
 const BOOST_TIME = 6; // seconds
 const RIPPLE_FACTOR = slow ? 0.5 : 1.2;
 
-const drawCircle = (context, width, height, progress, radius, time) => {
-  const radiusBoost = 1 + (GROWTH_BOOST_FACTOR * (1 - progress)) / (1 - progress);
+const drawCircle = (context, width, height, progress, time) => {
+  const radius = Math.sqrt((width) * (width) + (height) * (height)) * progress
+  const radiusBoost = 1 + (GROWTH_BOOST_FACTOR * (1 - progress));
   const x = width / 2 * (1 + X_CENTER_MOVE_RANGE * Math.sin(time / X_CENTER_MOVE_SPEED * 2 * Math.PI));
   const y = height / 2 * (1 + Y_CENTER_MOVE_RANGE * Math.sin(time / Y_CENTER_MOVE_SPEED * 2 * Math.PI));
   const ellipseRatio = (Math.sin(time) / 2 + 0.5) * MIN_ELLIPSE_RATIO + (0.5 - Math.sin(time) / 2) * MAX_ELLIPSE_RATIO; 
@@ -62,13 +63,9 @@ const sketch = () => {
       const correlation = -Math.cos(Math.abs(progressBoost - boostProgress) * Math.PI)
 
       const boostFactor = Math.sin(boostProgress * Math.PI * 2) / 2 * correlation * RIPPLE_FACTOR;
-      const progress = linearProgress * (1 + boostFactor);
-      return {
-        progress,
-        radius: Math.sqrt((width) * (width) + (height) * (height)) * progress
-      }
-    }).sort((a, b) => b.radius - a.radius).forEach(circle => {
-      drawCircle(context, width, height, circle.progress, circle.radius, time);
+      return linearProgress * (1 + boostFactor);
+    }).sort((a, b) => b - a).forEach(progress => {
+      drawCircle(context, width, height, progress, time);
     });
   };
 };
