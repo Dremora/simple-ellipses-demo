@@ -9,7 +9,8 @@ const settings = {
 
 const COLOR_CHANGE_SPEED = slow ? 15 : 4; // seconds
 const ELLIPSE_DURATION = slow ? 40 : 6; // seconds
-const ELLIPSE_STROKE_WIDTH = 100;
+const ELLIPSE_MIN_STROKE_WIDTH = 1;
+const ELLIPSE_MAX_STROKE_WIDTH = 100;
 const ELLIPSE_COUNT = 40;
 const MIN_ELLIPSE_RATIO = 1.1;
 const MAX_ELLIPSE_RATIO = slow ? 1.3 : 2;
@@ -37,7 +38,7 @@ const drawCircle = (context, width, height, progress, radius, time) => {
   
   context.beginPath();
   context.strokeStyle = Color.style({ hsl: [ (20 + progress * 200 + time * 360 / COLOR_CHANGE_SPEED) % 360, 0 + 50 + progress * 50, 50 ] });
-  context.lineWidth = ELLIPSE_STROKE_WIDTH * progress + 1;
+  context.lineWidth = (ELLIPSE_MAX_STROKE_WIDTH - ELLIPSE_MIN_STROKE_WIDTH) * progress + ELLIPSE_MIN_STROKE_WIDTH;
   context.ellipse(x, y, radius * radiusBoost, radius * radiusBoost * ellipseRatio, time / ROTATION_SPEED * 2 * Math.PI + progress * ROTATION_STAGGERING * 2 * Math.PI, 0, 2 * Math.PI);
   context.fillStyle = Color.style({ hsl: [ (20 + progress * 200 + time * 360 / COLOR_CHANGE_SPEED) % 360, 0 + progress * 100, 50 ] });
   context.stroke();
