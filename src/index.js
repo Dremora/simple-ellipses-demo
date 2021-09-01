@@ -56,7 +56,7 @@ const sketch = () => {
       const progressBoost = Math.sin(linearProgress * Math.PI);
 
       // [0, 1]
-      const boostProgress = time % (BOOST_DELAY + BOOST_TIME) <= BOOST_TIME ? (time % (BOOST_DELAY + BOOST_TIME)) / BOOST_TIME : 0
+      const boostProgress = time % (BOOST_DELAY + BOOST_TIME) <= BOOST_DELAY ? 0 : (time % (BOOST_DELAY + BOOST_TIME) - BOOST_DELAY) / BOOST_TIME;
 
       // 0 when values are completely different, 1 when they are the same
       const correlation = -Math.cos(Math.abs(progressBoost - boostProgress) * Math.PI)
