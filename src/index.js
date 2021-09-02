@@ -14,9 +14,10 @@ const ELLIPSE_DURATION = slow ? 40 : 6; // seconds
 const ELLIPSE_MIN_STROKE_WIDTH = 1;
 const ELLIPSE_MAX_STROKE_WIDTH = 100;
 const ELLIPSE_COUNT = 40;
-const MIN_ELLIPSE_RATIO = 1.1;
+const MIN_ELLIPSE_RATIO = slow ? 1 / 1.3 : 1 / 2;
 const MAX_ELLIPSE_RATIO = slow ? 1.3 : 2;
-const ROTATION_SPEED = slow ? 15 : 5;
+const ELLIPSE_RATIO_CHANGE_PERIOD = 12; // seconds
+const ROTATION_PERIOD = slow ? 15 : 5;
 const ROTATION_STAGGERING = slow ? 1.2 : 2;
 const GROWTH_BOOST_FACTOR = 0.2;
 const X_CENTER_MOVE_SPEED = 8; // seconds
@@ -43,8 +44,9 @@ const drawCircle = (
   const radiusX = radius * radiusBoost;
   const radiusY = radius * radiusBoost * ellipseRatio;
   const rotation =
-    (time / ROTATION_SPEED) * 2 * Math.PI +
-    progress * ROTATION_STAGGERING * 2 * Math.PI;
+    ((2 * Math.PI * time) / ROTATION_PERIOD +
+      progress * ROTATION_STAGGERING * 2 * Math.PI) %
+    (2 * Math.PI);
 
   context.beginPath();
   context.ellipse(x, y, radiusX, radiusY, rotation, 0, 2 * Math.PI);
@@ -86,8 +88,10 @@ const sketch = () => {
           Math.sin((time / Y_CENTER_MOVE_SPEED) * 2 * Math.PI));
 
     const ellipseRatio =
-      (Math.sin(time) / 2 + 0.5) * MIN_ELLIPSE_RATIO +
-      (0.5 - Math.sin(time) / 2) * MAX_ELLIPSE_RATIO;
+      (Math.sin((time * Math.PI * 2) / ELLIPSE_RATIO_CHANGE_PERIOD) / 2 + 0.5) *
+        MIN_ELLIPSE_RATIO +
+      (0.5 - Math.sin((time * Math.PI * 2) / ELLIPSE_RATIO_CHANGE_PERIOD) / 2) *
+        MAX_ELLIPSE_RATIO;
 
     Array.from({ length: ELLIPSE_COUNT }, (_, i) => {
       const linearProgress =
