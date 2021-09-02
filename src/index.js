@@ -50,6 +50,9 @@ const drawCircle = (context, width, height, progress, time) => {
     (time / ROTATION_SPEED) * 2 * Math.PI +
     progress * ROTATION_STAGGERING * 2 * Math.PI;
 
+  context.beginPath();
+  context.ellipse(x, y, radiusX, radiusY, rotation, 0, 2 * Math.PI);
+
   context.fillStyle = Color.style({
     hsl: [
       (100 + progress * 200 + (time * 360) / COLOR_CHANGE_SPEED) % 360,
@@ -57,11 +60,8 @@ const drawCircle = (context, width, height, progress, time) => {
       (Math.sin((time * 2) / COLOR_CHANGE_SPEED) / 2 + 0.5) * 100,
     ],
   });
-  context.beginPath();
-  context.ellipse(x, y, radiusX, radiusY, rotation, 0, 2 * Math.PI);
   context.fill();
 
-  context.beginPath();
   context.strokeStyle = Color.style({
     hsl: [
       (20 + progress * 200 + (time * 360) / COLOR_CHANGE_SPEED) % 360,
@@ -72,22 +72,11 @@ const drawCircle = (context, width, height, progress, time) => {
   context.lineWidth =
     (ELLIPSE_MAX_STROKE_WIDTH - ELLIPSE_MIN_STROKE_WIDTH) * progress +
     ELLIPSE_MIN_STROKE_WIDTH;
-  context.ellipse(x, y, radiusX, radiusY, rotation, 0, 2 * Math.PI);
-  context.fillStyle = Color.style({
-    hsl: [
-      (20 + progress * 200 + (time * 360) / COLOR_CHANGE_SPEED) % 360,
-      0 + progress * 100,
-      50,
-    ],
-  });
   context.stroke();
 };
 
 const sketch = () => {
   return ({ context, width, height, time }) => {
-    context.fillStyle = "black";
-    context.fillRect(0, 0, width, height);
-
     Array.from({ length: ELLIPSE_COUNT }, (_, i) => {
       const linearProgress =
         ((time + (i * ELLIPSE_DURATION) / ELLIPSE_COUNT) % ELLIPSE_DURATION) /
